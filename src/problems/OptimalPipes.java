@@ -9,6 +9,7 @@ public class OptimalPipes {
 	return needPipesHelper(pipeLength, requests, usedPipes, 0, requests.length);
     }
 
+    @SuppressWarnings("unchecked")
     static int needPipesHelper(int pipeLength, int[] requests,
 	    ArrayList<Integer> usedPipes, int startIndex, int currentMin) {
 
@@ -27,7 +28,9 @@ public class OptimalPipes {
 	    {
 		if (currentRequest <= pipeLength - usedPipes.get(j))
 		{
-		    clone = usedPipes;
+		    clone = new ArrayList<Integer>();
+		    for (int k = 0; k < usedPipes.size(); k++)
+			clone.add(k, usedPipes.get(k));
 		    clone.set(j, currentRequest + usedPipes.get(j));
 		    addedInTheForLoop = true;
 		    newResult = needPipesHelper(pipeLength, requests, clone, i+1, currentMin);
@@ -36,15 +39,17 @@ public class OptimalPipes {
 	    }
 	    if (!addedInTheForLoop)
 	    {
-		clone = usedPipes;
-		usedPipes.add(requests[i]);
+		clone = new ArrayList<Integer>();
+		    for (int k = 0; k < usedPipes.size(); k++)
+			clone.add(k, usedPipes.get(k));
+		clone.add(requests[i]);
 		newResult = needPipesHelper(pipeLength, requests, clone, i+1, currentMin);
 		currentMin = currentMin > newResult ? newResult : currentMin;
 	    }
 	    
 	}//for 
 
-	return requests.length;
+	return currentMin;
     }
 
     public static void main(String[] args) {
